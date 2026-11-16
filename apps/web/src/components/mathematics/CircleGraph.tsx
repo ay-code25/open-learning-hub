@@ -106,6 +106,31 @@ export default function CircleGraph({
           stroke="#0f766e"
           strokeWidth="1.5"
         />
+        {/* Side lengths of the right-angled triangle */}
+        {Math.abs(px - cx) > 25 && (
+          <text
+            x={(cx + px) / 2}
+            y={cy + (py < cy ? 19 : -12)}
+            textAnchor="middle"
+            fontSize="13"
+            fill="#0f766e"
+          >
+            |x|
+          </text>
+        )}
+
+        {Math.abs(py - cy) > 25 && (
+          <text
+            x={px + (px < cx ? -12 : 12)}
+            y={(cy + py) / 2}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="13"
+            fill="#0f766e"
+          >
+            |y|
+          </text>
+        )}
         <circle cx={cx} cy={cy} r="4" fill="#0f172a" />
         <circle cx={px} cy={py} r="6" fill="#e11d48" />
 
@@ -164,5 +189,6 @@ export default function CircleGraph({
     </section>
   );
 }
+
 
 
