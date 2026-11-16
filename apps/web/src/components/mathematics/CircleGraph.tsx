@@ -131,6 +131,17 @@ export default function CircleGraph({
             |y|
           </text>
         )}
+        {/* Radius label */}
+        <text
+          x={(cx + px) / 2 + (py < cy ? -12 : 12)}
+          y={(cy + py) / 2 - 10}
+          textAnchor="middle"
+          fontSize="15"
+          fontWeight="bold"
+          fill="#c2410c"
+        >
+          r
+        </text>
         <circle cx={cx} cy={cy} r="4" fill="#0f172a" />
         <circle cx={px} cy={py} r="6" fill="#e11d48" />
 
@@ -189,6 +200,7 @@ export default function CircleGraph({
     </section>
   );
 }
+
 
 
 
