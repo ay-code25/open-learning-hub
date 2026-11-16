@@ -1,6 +1,6 @@
-
+﻿
 import TheoremProof from "@/components/mathematics/TheoremProof";
-import CircleGraph from "@/components/mathematics/CircleGraph";
+import InteractiveCircleLesson from "@/components/mathematics/InteractiveCircleLesson";
 
 export default function TheoremDemoPage() {
   return (
@@ -49,8 +49,9 @@ export default function TheoremDemoPage() {
           ]}
           conclusion="بنابراین هر نقطهٔ دایره با مرکز (0,0) و شعاع r معادلهٔ x² + y² = r² را برآورده می‌سازد. برعکس، برای r مثبت، هر نقطه‌ای که این معادله را برآورده کند، روی همان دایره قرار دارد."
         />
-        <CircleGraph />
+        <InteractiveCircleLesson />
       </div>
     </main>
   );
 }
+

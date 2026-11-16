@@ -1,11 +1,28 @@
-
+﻿
 "use client";
 
 import { useState } from "react";
 
-export default function CircleGraph() {
-  const [radius, setRadius] = useState(3);
+type CircleGraphProps = {
+  radius?: number;
+  onRadiusChange?: (radius: number) => void;
+};
+
+export default function CircleGraph({
+  radius: controlledRadius,
+  onRadiusChange,
+}: CircleGraphProps) {
+  const [localRadius, setLocalRadius] = useState(3);
   const [angle, setAngle] = useState(45);
+
+  const radius = controlledRadius ?? localRadius;
+
+  const setRadius = (value: number) => {
+    if (controlledRadius === undefined) {
+      setLocalRadius(value);
+    }
+    onRadiusChange?.(value);
+  };
 
   const scale = 32;
   const cx = 180;
@@ -118,3 +135,4 @@ export default function CircleGraph() {
     </section>
   );
 }
+
