@@ -77,6 +77,35 @@ export default function CircleGraph({
           strokeWidth="3"
         />
 
+        {/* Right-angled triangle for the Pythagorean proof */}
+        <line
+          x1={cx}
+          y1={cy}
+          x2={px}
+          y2={cy}
+          stroke="#0d9488"
+          strokeWidth="2.5"
+          strokeDasharray="6 4"
+        />
+
+        <line
+          x1={px}
+          y1={cy}
+          x2={px}
+          y2={py}
+          stroke="#0d9488"
+          strokeWidth="2.5"
+          strokeDasharray="6 4"
+        />
+
+        <path
+          d={`M ${px < cx ? px + 10 : px - 10} ${cy} V ${
+            py < cy ? cy - 10 : cy + 10
+          } H ${px}`}
+          fill="none"
+          stroke="#0f766e"
+          strokeWidth="1.5"
+        />
         <circle cx={cx} cy={cy} r="4" fill="#0f172a" />
         <circle cx={px} cy={py} r="6" fill="#e11d48" />
 
@@ -135,4 +164,5 @@ export default function CircleGraph({
     </section>
   );
 }
+
 
