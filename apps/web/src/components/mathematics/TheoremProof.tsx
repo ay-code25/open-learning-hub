@@ -1,7 +1,8 @@
-
+﻿
 "use client";
 
 import { useState } from "react";
+import MathEquation from "./MathEquation";
 
 export type ProofStep = {
   title: string;
@@ -87,7 +88,7 @@ export default function TheoremProof({
                 dir="ltr"
                 className="mt-4 overflow-x-auto rounded-xl border border-blue-200 bg-white p-5 text-center font-mono text-lg font-semibold text-blue-950"
               >
-                {step.formula}
+                <MathEquation equation={step.formula} />
               </div>
             )}
           </article>
@@ -136,3 +137,4 @@ export default function TheoremProof({
     </section>
   );
 }
+
