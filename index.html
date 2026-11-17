@@ -1302,4 +1302,31 @@ document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].in
 <!-- END FLOATING MATH HELPER -->
 
 
+
+<style>
+/* MATH HELPER SIDEBAR POSITION FIX */
+.math-helper-floating {
+  left: auto !important;
+  right: 20px !important;
+  bottom: 95px !important;
+  width: 110px !important;
+}
+.math-assistant-panel {
+  left: auto !important;
+  right: 20px !important;
+  bottom: 220px !important;
+}
+@media (max-width: 600px) {
+  .math-helper-floating {
+    right: 8px !important;
+    bottom: 65px !important;
+    width: 90px !important;
+  }
+  .math-assistant-panel {
+    right: 8px !important;
+    bottom: 170px !important;
+  }
+}
+</style>
+
 </body></html>
