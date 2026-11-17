@@ -1,4 +1,4 @@
-﻿
+
 "use client";
 
 import { useState } from "react";
@@ -15,6 +15,8 @@ type TheoremProofProps = {
   statement: string;
   steps: ProofStep[];
   conclusion: string;
+  currentStep?: number;
+  onStepChange?: (step: number) => void;
 };
 
 export default function TheoremProof({
@@ -22,8 +24,28 @@ export default function TheoremProof({
   statement,
   steps,
   conclusion,
+  currentStep,
+  onStepChange,
 }: TheoremProofProps) {
-  const [visibleSteps, setVisibleSteps] = useState(0);
+  const [localStep, setLocalStep] = useState(0);
+  const visibleSteps = currentStep ?? localStep;
+
+  const setVisibleSteps = (
+    update: number | ((previous: number) => number)
+  ) => {
+    const next =
+      typeof update === "function"
+        ? update(visibleSteps)
+        : update;
+
+    const safeNext = Math.max(0, Math.min(next, steps.length));
+
+    if (currentStep === undefined) {
+      setLocalStep(safeNext);
+    }
+
+    onStepChange?.(safeNext);
+  };
 
   const completed = visibleSteps === steps.length;
 
@@ -137,4 +159,3 @@ export default function TheoremProof({
     </section>
   );
 }
-

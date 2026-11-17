@@ -1,4 +1,4 @@
-﻿
+
 "use client";
 
 import { useState } from "react";
@@ -6,11 +6,13 @@ import { useState } from "react";
 type CircleGraphProps = {
   radius?: number;
   onRadiusChange?: (radius: number) => void;
+  proofStep?: number;
 };
 
 export default function CircleGraph({
   radius: controlledRadius,
   onRadiusChange,
+  proofStep = 4,
 }: CircleGraphProps) {
   const [localRadius, setLocalRadius] = useState(3);
   const [angle, setAngle] = useState(45);
@@ -164,6 +166,7 @@ export default function CircleGraph({
         <label className="block font-semibold text-slate-800">
           شعاع: {radius}
           <input
+            dir="ltr"
             type="range"
             min="1"
             max="4"
@@ -172,6 +175,26 @@ export default function CircleGraph({
             onChange={(event) => setRadius(Number(event.target.value))}
             className="mt-3 w-full accent-blue-600"
           />
+
+          <span className="mt-3 flex items-center gap-3">
+            <span>r =</span>
+            <input
+              dir="ltr"
+              type="number"
+              min="1"
+              max="4"
+              step="0.1"
+              value={radius}
+              onChange={(event) => {
+                const value = event.target.valueAsNumber;
+                if (Number.isFinite(value)) {
+                  setRadius(Math.min(4, Math.max(1, value)));
+                }
+              }}
+              className="w-28 rounded-lg border border-blue-300 bg-white px-3 py-2 text-center text-slate-900"
+              aria-label="Enter circle radius"
+            />
+          </span>
         </label>
 
         <label className="block font-semibold text-slate-800">
@@ -200,7 +223,3 @@ export default function CircleGraph({
     </section>
   );
 }
-
-
-
-
