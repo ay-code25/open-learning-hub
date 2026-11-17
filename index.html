@@ -957,7 +957,7 @@ document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].in
           aria-label="باز کردن دستیار آموزشی ریاضی"
           aria-controls="mathAssistantPanel"
           aria-expanded="false">
-    <img src="math-helper-animated.gif"
+    <img src="math-helper-question.gif"
          alt="کمک‌یار کارتونی ریاضی">
   </button>
 </div>
@@ -1285,9 +1285,145 @@ document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].in
     }
   });
 
+
+  /* DRAGGABLE MATH HELPER V2 */
+  const helperBox = openButton.closest(".math-helper-floating");
+  const positionKey = "mathHelperSavedPositionV2";
+  let dragState = null;
+  let suppressDragClick = false;
+
+  function moveMathHelper(x, y) {
+    const maxX = Math.max(0, window.innerWidth - helperBox.offsetWidth);
+    const maxY = Math.max(0, window.innerHeight - helperBox.offsetHeight);
+
+    const left = Math.max(0, Math.min(maxX, x));
+    const top = Math.max(0, Math.min(maxY, y));
+
+    helperBox.style.setProperty("left", left + "px", "important");
+    helperBox.style.setProperty("top", top + "px", "important");
+    helperBox.style.setProperty("right", "auto", "important");
+    helperBox.style.setProperty("bottom", "auto", "important");
+  }
+
+  function positionMathPanel() {
+    if (panel.hidden) return;
+
+    const rect = helperBox.getBoundingClientRect();
+    const pw = panel.offsetWidth;
+    const ph = panel.offsetHeight;
+
+    const left = Math.max(8, Math.min(
+      rect.left, window.innerWidth - pw - 8
+    ));
+
+    // Above the mascot when there is room; otherwise below it.
+    const above = rect.top - ph - 12;
+    const below = rect.bottom + 12;
+
+    let top = above >= 8 ? above : below;
+
+    top = Math.max(8, Math.min(
+      top, window.innerHeight - ph - 8
+    ));
+
+    panel.style.setProperty("left", left + "px", "important");
+    panel.style.setProperty("top", top + "px", "important");
+    panel.style.setProperty("right", "auto", "important");
+    panel.style.setProperty("bottom", "auto", "important");
+  }
+
+  try {
+    const saved = JSON.parse(localStorage.getItem(positionKey));
+    if (saved &&
+        Number.isFinite(saved.x) &&
+        Number.isFinite(saved.y)) {
+      moveMathHelper(saved.x, saved.y);
+    }
+  } catch (error) {}
+
+  openButton.style.touchAction = "none";
+  openButton.style.userSelect = "none";
+
+  const helperImage = openButton.querySelector("img");
+  if (helperImage) {
+    helperImage.draggable = false;
+    helperImage.style.pointerEvents = "none";
+  }
+
+  openButton.addEventListener("pointerdown", function (event) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    const rect = helperBox.getBoundingClientRect();
+
+    dragState = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      left: rect.left,
+      top: rect.top,
+      moved: false
+    };
+
+    openButton.setPointerCapture(event.pointerId);
+  });
+
+  openButton.addEventListener("pointermove", function (event) {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+    const dx = event.clientX - dragState.startX;
+    const dy = event.clientY - dragState.startY;
+
+    if (Math.hypot(dx, dy) > 7) {
+      dragState.moved = true;
+    }
+
+    if (dragState.moved) {
+      moveMathHelper(dragState.left + dx, dragState.top + dy);
+      positionMathPanel();
+    }
+  });
+
+  openButton.addEventListener("pointerup", function (event) {
+    if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+    if (dragState.moved) {
+      suppressDragClick = true;
+      const rect = helperBox.getBoundingClientRect();
+
+      try {
+        localStorage.setItem(positionKey, JSON.stringify({
+          x: rect.left,
+          y: rect.top
+        }));
+      } catch (error) {}
+    }
+
+    dragState = null;
+  });
+
+  openButton.addEventListener("pointercancel", function () {
+    dragState = null;
+  });
+
+  window.addEventListener("resize", function () {
+    if (helperBox.style.top) {
+      const rect = helperBox.getBoundingClientRect();
+      moveMathHelper(rect.left, rect.top);
+    }
+    positionMathPanel();
+  });
+
   openButton.addEventListener("click", function () {
-    if (panel.hidden) openAssistant();
-    else closeAssistant();
+    if (suppressDragClick) {
+      suppressDragClick = false;
+      return;
+    }
+    if (panel.hidden) {
+      openAssistant();
+    } else {
+      closeAssistant();
+    }
+    positionMathPanel();
   });
 
   closeButton.addEventListener("click", closeAssistant);
@@ -1304,28 +1440,62 @@ document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].in
 
 
 <style>
+
 /* MATH HELPER SIDEBAR POSITION FIX */
 .math-helper-floating {
-  left: auto !important;
-  right: 20px !important;
+  left: clamp(12px, 8vw, 160px) !important;
+  right: auto !important;
   bottom: 95px !important;
   width: 110px !important;
 }
 .math-assistant-panel {
-  left: auto !important;
-  right: 20px !important;
+  left: 18px !important;
+  right: auto !important;
   bottom: 220px !important;
 }
-@media (max-width: 600px) {
-  .math-helper-floating {
-    right: 8px !important;
-    bottom: 65px !important;
-    width: 90px !important;
+
+/* Compact helper on the homepage */
+body:has(.thesis-hero) .math-helper-floating {
+  left: 6px !important;
+  width: 58px !important;
+  bottom: 90px !important;
+}
+body:has(.thesis-hero) .math-assistant-panel {
+  left: 8px !important;
+  bottom: 165px !important;
+}
+
+@media (max-width: 900px) {
+  .math-helper-floating,
+  body:has(.thesis-hero) .math-helper-floating {
+    left: 8px !important;
+    right: auto !important;
+    bottom: 70px !important;
+    width: 70px !important;
   }
-  .math-assistant-panel {
-    right: 8px !important;
-    bottom: 170px !important;
+  .math-assistant-panel,
+  body:has(.thesis-hero) .math-assistant-panel {
+    left: 8px !important;
+    right: auto !important;
+    bottom: 155px !important;
   }
+}
+</style>
+
+
+<style>
+.math-helper-trigger {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+}
+.math-helper-trigger:active {
+  cursor: grabbing;
+}
+.math-helper-trigger img {
+  pointer-events: none;
+  -webkit-user-drag: none;
 }
 </style>
 
