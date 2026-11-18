@@ -263,6 +263,27 @@ body:not(.dark) .article > section > p {
 }
 </style>
 
+<style id="two-visible-languages-css">
+/* The language choices are always visible: no pop-up or drop-down. */
+.site-language-nav{display:flex;flex:none;align-items:center;gap:3px;direction:ltr;
+ background:var(--paper,#fff);border:1px solid var(--border,#dce6f5);
+ border-radius:12px;padding:3px;font-size:13px;line-height:1.4}
+.site-language-nav a{display:inline-flex;align-items:center;justify-content:center;
+ min-height:32px;padding:6px 13px;white-space:nowrap;border-radius:9px;
+ font-weight:700;color:var(--ink,#203451);text-decoration:none}
+.site-language-nav a:hover,.site-language-nav a:focus-visible{background:var(--mint,#eaf5ff)}
+.site-language-nav a:focus-visible{outline:3px solid #f69e34;outline-offset:2px}
+.site-language-nav a[aria-current="page"]{background:#2563eb;color:white}
+@media(max-width:1100px){.topbar .small.muted{display:none}}
+@media(max-width:760px){
+ .topbar{height:auto;min-height:62px;flex-wrap:wrap;gap:5px;padding:7px 12px}
+ .topbar>.top-actions:first-child{order:1}
+ .topbar>.top-actions:nth-child(2){order:2}
+ .topbar>.site-language-nav{order:3;width:100%;margin-top:3px}
+ .site-language-nav a{flex:1;min-width:0;padding:7px 8px}
+ .article section,.article section>h2{scroll-margin-top:140px}
+}
+</style>
 </head>
 <body>
 <div id="overlay"></div>
@@ -274,7 +295,7 @@ body:not(.dark) .article > section > p {
  <div class="aside-foot">کتابخانهٔ آزاد ریاضی · یادگیری تعاملی</div>
 </aside>
 <div class="main">
-<header class="topbar"><div class="top-actions"><button id="menuButton" class="button mobile-toggle" aria-label="باز کردن فهرست">☰</button><span class="eyebrow" id="topTitle">مقاطع مخروطی و مختصات قطبی</span></div><div class="top-actions"><span class="small muted">آموزش آزاد و تعاملی ریاضی</span><button class="button share-btn" id="shareBtn" type="button" title="اشتراک‌گذاری" hidden>↗ اشتراک‌گذاری</button><button class="button" id="themeBtn" title="حالت شب">☾</button><button class="button" id="printBtn" title="چاپ">⎙ چاپ</button></div></header>
+<header class="topbar"><div class="top-actions"><button id="menuButton" class="button mobile-toggle" aria-label="باز کردن فهرست">☰</button><span class="eyebrow" id="topTitle">مقاطع مخروطی و مختصات قطبی</span></div><div class="top-actions"><span class="small muted">آموزش آزاد و تعاملی ریاضی</span><button class="button share-btn" id="shareBtn" type="button" title="اشتراک‌گذاری" hidden>↗ اشتراک‌گذاری</button><button class="button" id="themeBtn" title="حالت شب">☾</button><button class="button" id="printBtn" title="چاپ">⎙ چاپ</button></div><nav id="two-visible-languages" class="site-language-nav" aria-label="ژبه / زبان"><a href="./" lang="fa-AF" hreflang="fa-AF" aria-current="page">فارسی</a><a href="ps/" lang="ps-AF" hreflang="ps-AF">پښتو</a></nav></header>
 <main class="content" id="mainContent" tabindex="-1"></main>
 </div></div>
 <script id="conceptLessonScript">
@@ -957,7 +978,7 @@ document.addEventListener('keydown',e=>{if(e.key==='/'&&!['INPUT','TEXTAREA'].in
           aria-label="باز کردن دستیار آموزشی ریاضی"
           aria-controls="mathAssistantPanel"
           aria-expanded="false">
-    <img src="math-helper-question.gif"
+    <img src="ps/math-helper-question.gif"
          alt="کمک‌یار کارتونی ریاضی">
   </button>
 </div>
